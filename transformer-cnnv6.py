@@ -183,6 +183,8 @@ def analyzeDescrFile(fname):
              if prop == "smiles": 
                 ind_mol = i;
                 continue;
+             if prop.lower() == "augid":  # Explicitly exclude `augid`
+                continue
              props[j] = [i, prop];
              j = j + 1;          
           continue;
