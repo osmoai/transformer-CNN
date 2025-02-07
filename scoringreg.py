@@ -3,7 +3,7 @@ import numpy as np
 import argparse
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 
-def compute_statistics(augmented_file_pred, augmented_file_true=None, target_column='target'):
+def compute_statistics(augmented_file_pred,  augmented_number, augmented_file_true=None, target_column='target'):
     """
     Compute augmentation statistics:
     - Average predictions per molecule (group by `augid`)
@@ -25,9 +25,24 @@ def compute_statistics(augmented_file_pred, augmented_file_true=None, target_col
 
         y_pred = pd.read_csv(augmented_file_pred)
         y_true = pd.read_csv(augmented_file_true)
+        try:
+            y_pred.drop(['Unnamed: 1'],axis=1,inplace=True)
+        except:
+            print('no strange column!')
+        print(y_pred.head(),y_true.head())
+
+
+        if 'augid' not in y_true.columns:
+            "print augid automatically added in the y_true dataset"
+            y_true['augid'] = y_true.index//augmented_number
+            assert len(y_true)/augmented_number == round(len(y_true)/augmented_number), "you must provide the correct augid!"
+        print(y_pred.head(),y_true.head())
+
+        if target_column not in y_pred.columns and 'Result0' in y_pred.columns:
+            y_pred.rename(columns={'Result0': target_column}, inplace=True)
 
         if target_column not in y_pred.columns:
-            raise ValueError("Error: 'augid' or target column missing in dataset.")
+            raise ValueError("Error: target column missing in dataset.")
 
         if 'augid'  in  y_true.columns and target_column in y_true.columns :
             print('data structure matching perfectly')
@@ -35,9 +50,8 @@ def compute_statistics(augmented_file_pred, augmented_file_true=None, target_col
             y_pred = y_pred[[target_column]]
             y_pred.columns = ['prediction']
         else:
-            print('data structure error we cannot merge properly')
+            print('data structure without True property available => __CAUTION__ we return the fake perfect scoring')
             y_true = y_true[['augid']]
-
             y_pred = y_pred[[target_column]]
 
         df = pd.concat([y_true, y_pred], axis=1) 
@@ -73,7 +87,7 @@ def compute_statistics(augmented_file_pred, augmented_file_true=None, target_col
             print(f"MAE: {mae:.4f}")
         else:
 
-            print('FAKE values we cannot make Statistics on new data!')
+            print('IDEAL PERFECT FAKE scoring do not use them as this is new data without True property!')
             print(f"R²: {r2:.4f}")
             print(f"RMSE: {rmse:.4f}")
             print(f"MSE: {mse:.4f}")
@@ -88,8 +102,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Compute Augmentation Statistics")
     parser.add_argument("--augmented_file_pred", '-o', type=str, required=True, help="Path to the augmented dataset CSV")
     parser.add_argument("--augmented_file_true", '-i', type=str, default=None, required=False, help="Path to the augmented dataset CSV")
-    parser.add_argument("--target_column", '-n', type=str, required=True, help="Name of the target column (e.g., 'property')")
+    parser.add_argument("--target_column", '-t', type=str, required=True, help="Name of the target column (e.g., 'property')")
+    parser.add_argument("--augmented_number",'-n', type=int, required=True, help="Number of augmentation to align the two files")
 
     args = parser.parse_args()
 
-    compute_statistics(args.augmented_file_pred, args.augmented_file_true, args.target_column)
+    compute_statistics(args.augmented_file_pred, args.augmented_number, args.augmented_file_true, args.target_column)
