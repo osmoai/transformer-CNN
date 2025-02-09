@@ -122,7 +122,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Perform cross-validation and train multiple models.")
 
     parser.add_argument("--config", type=str, default="config.cfg", help="Path to the config file.")
-    parser.add_argument("--script", type=str, default="transformer-cnnv6.py", help="Path to the model script.")
+    parser.add_argument("--script", type=str, default="transformer_cnn/transformer-cnnv6.py", help="Path to the model script.")
     parser.add_argument("--data", type=str, required=True, help="Path to dataset CSV file.")
     parser.add_argument("--output", type=str, default="cv_results", help="Folder to store CV results and models.")
     parser.add_argument("--gpu", type=int, default=0, help="GPU ID (default: 0).")
