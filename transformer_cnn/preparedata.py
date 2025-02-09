@@ -63,7 +63,7 @@ if __name__ == "__main__":
     parser.add_argument("--script", type=str, default="filter.py", help="Path to the script that runs the model.")
     parser.add_argument("--datain", type=str, required=True,  help="Path to  data file")
     parser.add_argument("--isomeric", type=str, default="True", help="smiles isomeric")
-    parser.add_argument("--dataout", type=str, help="Path to  data file")
+    parser.add_argument("--dataout", type=str, default="augmenteddata.csv",help="Path to  data file")
 
     args = parser.parse_args()
 

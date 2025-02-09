@@ -646,7 +646,7 @@ if __name__ == "__main__":
                     lines.append(canon_pairs[i]);
 
            callback = [ GenCallback() ];
-           history = smi2smi.fit_generator( generator = smi2smi_generator(),
+           history = smi2smi.fit( smi2smi_generator(),
                                      steps_per_epoch = int(math.ceil(len(canon_pairs) / smi_batch)),
                                      epochs = 10,
                                      use_multiprocessing=False,
@@ -818,7 +818,7 @@ if __name__ == "__main__":
               return;
 
         if EARLY_STOPPING > 0:
-           history = mdl.fit_generator( generator = train_generator,
+           history = mdl.fit( train_generator,
                      steps_per_epoch = len(DSC_TRAIN),
                      epochs = NUM_EPOCHS,
                      validation_data = valid_generator,
@@ -835,7 +835,7 @@ if __name__ == "__main__":
            mdl.save_weights("model.h5");
 
         else:
-           history = mdl.fit_generator( generator = all_generator,
+           history = mdl.fit( all_generator,
                      steps_per_epoch = len(DSC_ALL),
                      epochs = NUM_EPOCHS,
                      use_multiprocessing=False,
