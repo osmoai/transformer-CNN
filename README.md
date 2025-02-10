@@ -84,10 +84,13 @@ To **fully retrain the embedding transformer** (learning to transform random SMI
 retrain = True
 ```
 
-Additionally, prepare a dataset with two columns, where each molecule's first line is structured as:
+Additionally, prepare a dataset with two columns, where each molecule's first line is structured as canonical,canonical other are randomsmiles,canonical:
 
 ```
+canonicalsmile,canonicalsmile
 randomsmiles,canonicalsmile
+randomsmiles,canonicalsmile
+...
 ```
 
 ---
